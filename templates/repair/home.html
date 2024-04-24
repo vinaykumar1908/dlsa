@@ -1,0 +1,273 @@
+{%extends 'charts/base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{%block title%}
+Repair
+{%endblock title%}
+
+
+{%block content%}
+<h4 style="font-family:'Apple Chancery'; font-size: 32px;">Time: {{time}} </h4>
+
+
+
+<div class="container-fluid">
+    <div class="row" style="background-color: teal;" style="overflow-x:auto;">
+        <div class="">
+            <h3 class="text-dark">Shed In Report </h3>
+            <hr>
+
+        </div>
+        <h3>HHP</h3>
+        <div class="center2 table-wrapper-scroll-y my-custom-scrollbar overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+            <table class="table table-bordered ">
+                <form method="POST" action="{%url 'addFailedLoco'%}">
+                    {% csrf_token %}
+                    <h5>Add Failed Loco Number</h5>
+                    <input type="text" id="FailLoco" name="FailLoco"  style="background-color: white; color:black" />
+                    <script>
+                        $( "#FailLoco" ).autocomplete({
+                          source: '{%url 'addLocoautocomplete'%}'
+                            });
+                        </script>
+                        <input type="date" id="date1" name="ShedInDate" >
+                        <label for="date1">Failure Date</label>
+                          <span></span>
+                          <input type="time" id="time1" name="ShedInTime">
+                          <label for="time1"> Failure Time</label>
+                     
+                    <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+                </form>
+                <thead>
+                    
+                    <tr>
+                        <th>S.No</th>
+                        <th>Loco Number</th>
+                        <th>Failure Date</th>
+                        <th>Shed In Date</th>
+                        <th>Add Section</th>
+                        <th>Section</th>
+                        
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {%for l, p, c in holding%}
+                    {%if c.ShedIn == True %}
+                    {%if l.LocoType == 'WDP4D' or l.LocoType == 'WDP4B' or l.LocoType == 'WDG4' or l.LocoType == 'WDG4D'%}
+                    <tr class='danger '>
+                        <td class='text-primary'>{{forloop.counter}}</td>
+                        <td class='text-primary'>{{l.LocoNumber}}</td>
+                        <td class='text-primary'>{{c.LocoFailDate}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>
+                            <form method="POST" action="{%url 'addSection' l.id %}">
+                                {% csrf_token %}
+                                
+                                <input type="text" id="H{{l.id}}" name="addsection1"  style="background-color: white; color:black" />
+                                <script>
+                                    $( "#H{{l.id}}" ).autocomplete({
+                                      source: '{%url 'addsectionautocomplete'%}'
+                                        });
+                                    </script>
+                                 
+                                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+                            </form>
+                            
+                        </td>
+                        
+                        {%for x in p%}
+                        <td class='text-primary'>{{x.RepSection}} </td>
+                        {%endfor%}
+                        
+                    </tr>
+                    {%endif%}
+                    {%endif%}
+                    {%endfor%}
+                </tbody>
+                
+
+               
+                
+            </table>
+        </div>
+
+
+
+<h3>Alco</h3>
+        <div class="center2 table-wrapper-scroll-y my-custom-scrollbar overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Loco Number</th>
+                        <th>Failure Date</th>
+                        <th>Shed In Date</th>
+                        <th>Add Section</th>
+                        <th>Section</th>
+                        
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {%for l, p, c in holding%}
+                    {%if c.ShedIn == True %}
+                    {%if l.LocoType == 'WDM3A' or l.LocoType == 'WDM3D' or l.LocoType == 'WDG3A' or l.LocoType == 'WDS6'  %}
+                    <tr class='danger '>
+                        <td class='text-primary'>{{forloop.counter}}</td>
+                        <td class='text-primary'>{{l.LocoNumber}}</td>
+                        <td class='text-primary'>{{c.LocoFailDate}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>
+                            <form method="POST" action="{%url 'addSection' l.id %}">
+                                {% csrf_token %}
+                                
+                                <input type="text" id="A{{l.id}}" name="addsection1"  style="background-color: white; color:black" />
+                                
+                                <script>
+                                    $( "#A{{l.id}}" ).autocomplete({
+                                      source: '{%url 'addsectionautocomplete'%}'
+                                        });
+                                    </script>
+                                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+                            </form>
+                            
+                        </td>
+                        
+                        {%for x in p%}
+                        <td class='text-primary'>{{x.RepSection}} </td>
+                        {%endfor%}
+                        {%endif%}
+                        {%endif%}
+                    </tr>
+                    {%endfor%}
+                </tbody>
+                
+
+               
+                
+            </table>
+        </div>
+
+
+<h3>Electric</h3>
+        <div class="center2 table-wrapper-scroll-y my-custom-scrollbar overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Loco Number</th>
+                        <th>Failure Date</th>
+                        <th>Shed In Date</th>
+                        <th>Add Section</th>
+                        <th>Section</th>
+                        
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {%for l, p,c in holding%}
+                    {%if c.ShedIn == True %}
+                    {%if l.LocoType == 'WAP1' or l.LocoType == 'WAG5' or l.LocoType == 'WAG7'  %}
+                    <tr class='danger '>
+                        <td class='text-primary'>{{forloop.counter}}</td>
+                        <td class='text-primary'>{{l.LocoNumber}}</td>
+                        <td class='text-primary'>{{c.LocoFailDate}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>
+                            <form method="POST" action="{%url 'addSection' l.id %}">
+                                {% csrf_token %}
+                                
+                                <input type="text" id="E{{l.id}}" name="addsection1"  style="background-color: white; color:black" />
+                                <script>
+                                    $( "#E{{l.id}}" ).autocomplete({
+                                      source: '{%url 'addsectionautocomplete'%}'
+                                        });
+                                    </script>
+                                 
+                                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+                            </form>
+                            
+                        </td>
+                        
+                        {%for x in p%}
+                        <td class='text-primary'>{{x.RepSection}} </td>
+                        {%endfor%}
+                        {%endif%}
+                        {%endif%}
+                    </tr>
+                    {%endfor%}
+                </tbody>
+                
+
+               
+                
+            </table>
+        </div>
+        
+
+
+
+<h3>Failed Locos Not Shed In</h3>
+<div class="center2 table-wrapper-scroll-y my-custom-scrollbar overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Loco Number</th>
+                <th>Failure Date</th>
+                <th>Control Actions</th>
+                
+                
+            </tr>
+            
+        </thead>
+        <tbody>
+            {%for l, p, c in holding%}
+            {%if c.ShedIn == False %}
+            
+            <tr class='danger '>
+                <td class='text-primary'>{{forloop.counter}}</td>
+                <td class='text-primary'>{{l.LocoNumber}}</td>
+                <td class='text-primary'>{{c.LocoFailDate}}</td>
+                <td class='text-primary'>
+                    <form method="POST" action="{%url 'addShedInData' l.id %}">
+                        {% csrf_token %}
+                        <input type="checkbox" id="vehicle1" name="ShedIn" value="True">
+                        <label for="ShedIn"> Has the Loco Entered in Shed ?</label>
+
+                          <input type="date" id="date" name="ShedInDate" >
+                          <label for="date">Shed In Date</label>
+                            <span></span>
+                            <input type="time" id="time" name="ShedInTime">
+                            <label for="time"> Shed In Time</label>
+
+
+                      
+                        <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+                    </form>
+                    
+                </td>
+                
+                {%endif%}
+            </tr>
+            {%endfor%}
+        </tbody>
+        
+
+       
+        
+    </table>
+</div>
+
+        
+    </div>
+</div>
+
+
+
+                {%endblock content%}
+                {%block afterbody%}
+                
+                {%endblock afterbody%}

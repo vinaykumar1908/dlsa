@@ -1,0 +1,67 @@
+{%extends 'charts/base.html'%}
+
+
+{%block title%}
+Staff
+{%endblock title%}
+
+
+{%block content%}
+<h4 style="font-family:'Apple Chancery'; font-size: 32px;">Time: {{time}} </h4>
+
+
+
+<div class="container-fluid">
+    <div class="row" style="background-color: teal;" style="overflow-x:auto;">
+        <div class="">
+            <h3 class="text-dark">Staff Details </h3>
+            <hr>
+
+        </div>
+        <div class="overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Staff Name</th>
+                        <th>Designation</th>
+                        <th>Token Number</th>
+                        <th>DOB</th>
+                        <th>Mob No</th>
+                        
+                    </tr>
+                    {%for staff in StaffList%}
+                    <tr class='danger'>
+                        <td class='text-primary'><a class="nav-link"
+                            style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
+                            >{{staff.StaffName}} </a></td>
+                        <td class='text-primary'><a class="nav-link"
+                            style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
+                            >{{staff.Designation}}</td>
+                        <td class='text-primary'><a class="nav-link"
+                            style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
+                            >{{staff.TokenNumber}}</td>
+                            <td class='text-primary'><a class="nav-link"
+                                style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
+                                >{{staff.DOB}}</td>
+                                <td class='text-primary'><a class="nav-link"
+                                    style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
+                                    >{{staff.StaffMobileNumber}}</td>
+                        
+
+                    </tr>
+                    {%endfor%}
+                </thead>
+                
+             
+                
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+                {%endblock content%}
+                {%block afterbody%}
+
+                {%endblock afterbody%}

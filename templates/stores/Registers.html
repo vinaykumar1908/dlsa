@@ -1,0 +1,34 @@
+{%extends 'charts/base.html'%}
+
+{% block head %}
+<style>
+.center {
+  margin: auto;
+  width: 60%;
+  border: 3px solid #73AD21;
+  padding: 10px;
+  text-align: center;
+}
+</style>
+{% endblock head %}
+{%block title%}
+TnP Home
+{%endblock title%}
+
+
+{%block content%}
+
+<h1 class="center">TnP</h1>
+
+<div>
+
+    
+    <ul class="list-group center">
+        <li class="list-group-item"><a href="{%url 'CSR'%}">Current Stock Register</a></li>
+        <li class="list-group-item"><a href="{%url 'SRR'%}">Stock Recieved register</a></li>
+        <li class="list-group-item"><a href="{%url 'SDRR'%}">Stock Dispatched to Staff register</a></li>
+        
+    </ul>
+</div>
+
+{%endblock content%}
