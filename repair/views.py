@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-from repair.models import ShedIn, RepairSection
+from repair.models import ShedIn, RepairSection, RepairDetail
 from section.models import Section
 from holding.models import Loco2
 from django.db.models import Q
 from django.http import JsonResponse
 from repair.forms import ToDoForm
-
+from django.utils import timezone
 @login_required
 def repairhome(request):
     print('repairhome activated')
@@ -19,11 +19,10 @@ def repairhome(request):
         place_json = [g,p,l]
         Item.append(place_json)
     print(Item)
-
+    timerightnow = timezone.now()
     context = {
-
-        'form' : ToDoForm,
         'holding' : Item,
+        'time' : timerightnow,
         #  'holding' : qs3,
         #  'Type' : "Electrical",
 
@@ -59,8 +58,9 @@ def addSection(request, id):
     print("----------------")
     print(Item)
     print('----------------')
+    timerightnow = timezone.now()
     context = {
-
+        'time' : timerightnow,
         'holding' : Item,
         #  'holding' : qs3,
         #  'Type' : "Electrical",
@@ -109,9 +109,11 @@ def addFailedLoco(request):
     print("----------------")
     print(Item)
     print('----------------')
+    timerightnow = timezone.now()
     context = {
 
         'holding' : Item,
+        'time' : timerightnow,
         #  'holding' : qs3,
         #  'Type' : "Electrical",
 
@@ -155,9 +157,11 @@ def addShedInData(request, id):
     print("----------------")
     print(Item)
     print('----------------')
+    timerightnow = timezone.now()
     context = {
 
         'holding' : Item,
+        'time' : timerightnow,
         #  'holding' : qs3,
         #  'Type' : "Electrical",
 
@@ -297,3 +301,33 @@ def addElectautocomplete(request):
             return JsonResponse(Item, safe=False)
             
             
+
+@login_required
+def viewSectionRepairDetail(request, id):
+    print('viewSectionRepairDetail activated')
+    print('-------id--------')
+    print(id)
+    a = RepairSection.objects.get(id=id)
+    print('RepairSection.objects.get(pk=id)')
+    print(a)
+
+    
+    b = RepairDetail.objects.all().filter(RepSection=a)
+    print(b)
+    # LocoList = ShedIn.objects.all().order_by('LocoNumber').filter(ShedOut=False)
+    # Item = list()
+    # for l in LocoList:
+    #     p = RepairSection.objects.all().order_by('-Date').filter(LocoNumber=l)
+    #     g = Loco2.objects.get(LocoNumber=l.LocoNumber.LocoNumber)
+    #     place_json = [g,p,l]
+    #     Item.append(place_json)
+    # print(Item)
+    timerightnow = timezone.now()
+    context = {
+        'rs' : a,
+        'time' : timerightnow,
+        'data' : b,
+        #  'Type' : "Electrical",
+
+    }
+    return render(request, 'repair/repairdetail.html', context)

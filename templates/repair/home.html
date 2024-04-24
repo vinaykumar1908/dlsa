@@ -78,7 +78,9 @@ Repair
                         </td>
                         
                         {%for x in p%}
-                        <td class='text-primary'>{{x.RepSection}} </td>
+                        <td class='text-primary'><a class="dropdown-item"
+                            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+                            href="{% url 'viewSectionRepairDetail' x.id%}">{{x.RepSection}} </a></td>
                         {%endfor%}
                         
                     </tr>
@@ -136,7 +138,9 @@ Repair
                         </td>
                         
                         {%for x in p%}
-                        <td class='text-primary'>{{x.RepSection}} </td>
+                        <td class='text-primary'><a class="dropdown-item"
+                            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+                            href="{% url 'viewSectionRepairDetail' x.id%}">{{x.RepSection}} </a>
                         {%endfor%}
                         {%endif%}
                         {%endif%}
@@ -192,7 +196,9 @@ Repair
                         </td>
                         
                         {%for x in p%}
-                        <td class='text-primary'>{{x.RepSection}} </td>
+                        <td class='text-primary'><a class="dropdown-item"
+                            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+                            href="{% url 'viewSectionRepairDetail' x.id%}">{{x.RepSection}} </a>
                         {%endfor%}
                         {%endif%}
                         {%endif%}

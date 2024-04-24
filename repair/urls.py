@@ -11,6 +11,7 @@ urlpatterns = [
     path('addHHPautocomplete/', views.addHHPautocomplete, name='addHHPautocomplete'),
     path('addAlcoautocomplete/', views.addAlcoautocomplete, name='addAlcoautocomplete'),
     path('addElectautocomplete/', views.addElectautocomplete, name='addElectautocomplete'),
+    path('viewSectionRepairDetail/<int:id>/', views.viewSectionRepairDetail, name='viewSectionRepairDetail'),
 ]
 
 
