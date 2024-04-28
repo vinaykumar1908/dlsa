@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'section.apps.SectionConfig',
     'staff.apps.StaffConfig',
     'card.apps.CardConfig',
+    'material.apps.MaterialConfig',
+    'shunting.apps.ShuntingConfig',
     'import_export',
     "bootstrap4",
     "bootstrap_datepicker_plus",

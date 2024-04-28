@@ -12,6 +12,8 @@ urlpatterns = [
     path('addAlcoautocomplete/', views.addAlcoautocomplete, name='addAlcoautocomplete'),
     path('addElectautocomplete/', views.addElectautocomplete, name='addElectautocomplete'),
     path('viewSectionRepairDetail/<int:id>/', views.viewSectionRepairDetail, name='viewSectionRepairDetail'),
+    path('addSectionRepairDetail/<int:id>/', views.addSectionRepairDetail, name='addSectionRepairDetail'),
+    path('ChangeRepDetCompletionStatus/<int:id>/', views.ChangeRepDetCompletionStatus, name='ChangeRepDetCompletionStatus'),
 ]
 
 

@@ -8,18 +8,26 @@ from django.db.models import Q
 from django.http import JsonResponse
 from repair.forms import ToDoForm
 from django.utils import timezone
+
+from material.models import MatNeededInLoco
+from shunting.models import ShuntingNeededInLoco, Locations
 @login_required
 def repairhome(request):
     print('repairhome activated')
+    timerightnow = timezone.now()
     LocoList = ShedIn.objects.all().order_by('LocoNumber').filter(ShedOut=False)
     Item = list()
     for l in LocoList:
         p = RepairSection.objects.all().order_by('-Date').filter(LocoNumber=l)
         g = Loco2.objects.get(LocoNumber=l.LocoNumber.LocoNumber)
-        place_json = [g,p,l]
+        if l.ShedIn :
+            h = timerightnow - l.ShedInDate 
+        else :
+            h = "Shed In Not Done"
+        j = timerightnow - l.LocoFailDate
+        place_json = [g,p,l, h ,j]
         Item.append(place_json)
     print(Item)
-    timerightnow = timezone.now()
     context = {
         'holding' : Item,
         'time' : timerightnow,
@@ -31,6 +39,8 @@ def repairhome(request):
 
 @login_required
 def addSection(request, id):
+    
+    timerightnow = timezone.now()
     print(id)
     print('addsection activated')
     if request.method=='POST':
@@ -50,15 +60,18 @@ def addSection(request, id):
     for l in LocoList:
         p = RepairSection.objects.all().order_by('-Date').filter(LocoNumber=l)
         g = Loco2.objects.get(LocoNumber=l.LocoNumber.LocoNumber)
-        place_json = [g,p,l]
+        if l.ShedIn :
+            h = timerightnow - l.ShedInDate 
+        else :
+            h = "Shed In Not Done"
+        j = timerightnow - l.LocoFailDate
+        place_json = [g,p,l, h , j]
         Item.append(place_json)
-    print(Item)
         
     print(p)
     print("----------------")
     print(Item)
     print('----------------')
-    timerightnow = timezone.now()
     context = {
         'time' : timerightnow,
         'holding' : Item,
@@ -73,6 +86,7 @@ def addSection(request, id):
 def addFailedLoco(request):
     print(id)
     print('addsection activated')
+    timerightnow = timezone.now()
     if request.method=='POST':
         a = request.POST.get('FailLoco')
         b = Loco2.objects.get(LocoNumber=a)
@@ -101,15 +115,18 @@ def addFailedLoco(request):
     for l in LocoList:
         p = RepairSection.objects.all().order_by('-Date').filter(LocoNumber=l)
         g = Loco2.objects.get(LocoNumber=l.LocoNumber.LocoNumber)
-        place_json = [g,p,l]
+        if l.ShedIn :
+            h = timerightnow - l.ShedInDate 
+        else :
+            h = "Shed In Not Done"
+        j = timerightnow - l.LocoFailDate
+        place_json = [g,p,l, h , j]
         Item.append(place_json)
-    print(Item)
         
     print(p)
     print("----------------")
     print(Item)
     print('----------------')
-    timerightnow = timezone.now()
     context = {
 
         'holding' : Item,
@@ -124,8 +141,10 @@ def addFailedLoco(request):
 @login_required
 def addShedInData(request, id):
     print(id)
+    timerightnow = timezone.now()
     print('addsection activated')
     if request.method=='POST':
+        
         print("getting post")
         print('printing request')
         print(request.POST.get('ShedInTime'))
@@ -149,7 +168,13 @@ def addShedInData(request, id):
     for l in LocoList:
         p = RepairSection.objects.all().order_by('-Date').filter(LocoNumber=l)
         g = Loco2.objects.get(LocoNumber=l.LocoNumber.LocoNumber)
-        place_json = [g,p,l]
+        j = timerightnow - l.LocoFailDate
+        if l.ShedIn :
+            h = timerightnow - l.ShedInDate 
+        else :
+            h = "Shed In Not Done"
+        
+        place_json = [g,p,l, h , j]
         Item.append(place_json)
     print(Item)
         
@@ -312,7 +337,7 @@ def viewSectionRepairDetail(request, id):
     print(a)
 
     
-    b = RepairDetail.objects.all().filter(RepSection=a)
+    b = RepairDetail.objects.all().filter(RepSection=a).order_by("created_date")
     print(b)
     # LocoList = ShedIn.objects.all().order_by('LocoNumber').filter(ShedOut=False)
     # Item = list()
@@ -323,10 +348,93 @@ def viewSectionRepairDetail(request, id):
     #     Item.append(place_json)
     # print(Item)
     timerightnow = timezone.now()
+    Item = list()
+    for h in b:
+        d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+        r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+        place_json = [h, d,r]
+        Item.append(place_json)
+    
     context = {
         'rs' : a,
         'time' : timerightnow,
-        'data' : b,
+        'data' : Item,
+        #  'Type' : "Electrical",
+
+    }
+    return render(request, 'repair/repairdetail.html', context)
+
+
+
+
+@login_required
+def addSectionRepairDetail(request, id):
+    print('addSectionRepairDetail activated')
+    print('-------id--------')
+    print(id)
+    a = RepairSection.objects.get(id=id)
+    print('RepairSection.objects.get(pk=id)')
+    print(a)
+    if request.method=='POST':
+        print(request)
+        j = request.POST.get('BookingDetail')
+        print(j)
+        k = RepairDetail(text=j, RepSection=a)
+        k.save()
+    
+    b = RepairDetail.objects.all().filter(RepSection=a).order_by("created_date")
+    print(b)
+    # LocoList = ShedIn.objects.all().order_by('LocoNumber').filter(ShedOut=False)
+    # Item = list()
+    # for l in LocoList:
+    #     p = RepairSection.objects.all().order_by('-Date').filter(LocoNumber=l)
+    #     g = Loco2.objects.get(LocoNumber=l.LocoNumber.LocoNumber)
+    #     place_json = [g,p,l]
+    #     Item.append(place_json)
+    # print(Item)
+    timerightnow = timezone.now()
+    Item = list()
+    for h in b:
+        d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+        r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+        place_json = [h, d,r]
+        Item.append(place_json)
+    
+    context = {
+        'rs' : a,
+        'time' : timerightnow,
+        'data' : Item,
+        #  'Type' : "Electrical",
+
+    }
+    return render(request, 'repair/repairdetail.html', context)
+
+
+@login_required
+def ChangeRepDetCompletionStatus(request, id):
+    print('ChangeJobMatRequirement activated')
+    print('-------id--------')
+    print(id)
+    if request.method=='POST':
+  
+        a = RepairDetail.objects.get(id=id)
+        a.saveworkcomplete2True()
+        c = a.RepSection
+        d = MatNeededInLoco.objects.all().filter(ForJob=a)
+        b = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
+        Item = list()
+        for h in b:
+            d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            place_json = [h, d, r]
+            Item.append(place_json)
+   
+    timerightnow = timezone.now()
+
+    context = {
+        'rs' : c,
+        'time' : timerightnow,
+        'data' : Item,
         #  'Type' : "Electrical",
 
     }

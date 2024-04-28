@@ -30,13 +30,13 @@ Home
                     <tr class='danger'>
                         <td class='text-primary'><a class="nav-link"
                             style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
-                            href="{% url 'holding_alco'%}">{{a}} </a></td>
+                            href="{% url 'holding_alco'%}">{{a.count}} </a></td>
                         <td class='text-primary'><a class="nav-link"
                             style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
-                            href="{% url 'holding_hhp'%}">{{b}}</td>
+                            href="{% url 'holding_hhp'%}">{{b.count}}</td>
                         <td class='text-primary'><a class="nav-link"
                             style="color:rgb(236, 9, 9); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
-                            href="{% url 'holding_electrical'%}">{{c}}</td>
+                            href="{% url 'holding_electrical'%}">{{c.count}}</td>
                         
 
                     </tr>
@@ -44,9 +44,9 @@ Home
                 <tbody>
                 
                     <tr>
-                        <th>No. of ALCO Loco Failures this month</th>
-                        <th>No. of HHP Loco Failures this month</th>
-                        <th>No. of Electric Loco Failures this month</th>
+                        <th>No. of ALCO Loco Online</th>
+                        <th>No. of HHP Loco Online</th>
+                        <th>No. of Electric Loco Online</th>
                 
                     </tr>
                     <tr class='danger'>

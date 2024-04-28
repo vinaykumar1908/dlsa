@@ -111,15 +111,29 @@ class RepairDetail(models.Model):
     def save(self, *args, **kwargs):
         Date = self.RepSection.Date
         d = Date
-        print(d)
+        
         self.Date = str(d)
         super(RepairDetail, self).save(*args, **kwargs)
     def approve(self):
         self.approved_comment = True
         self.save()
 
+    def save2True(self, *args, **kwargs):
+        self.waitingForMaterial = True
+        super(RepairDetail, self).save(*args, **kwargs)
+
+    def saveShunt2True(self, *args, **kwargs):
+        self.waitingForShunting = True
+        super(RepairDetail, self).save(*args, **kwargs)
+
+    def saveworkcomplete2True(self, *args, **kwargs):
+        self.workComplete = True
+        super(RepairDetail, self).save(*args, **kwargs)
+
+    
+
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return str(self.RepSection)
+        return f"{self.RepSection} with date {self.created_date} "

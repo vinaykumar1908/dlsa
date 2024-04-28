@@ -44,8 +44,8 @@ Repair
                     <tr>
                         <th>S.No</th>
                         <th>Loco Number</th>
-                        <th>Failure Date</th>
-                        <th>Shed In Date</th>
+                        <th>Failure Date / Days since Failure</th>
+                        <th>Shed In Date / Days since Shed In</th>
                         <th>Add Section</th>
                         <th>Section</th>
                         
@@ -53,14 +53,14 @@ Repair
                     
                 </thead>
                 <tbody>
-                    {%for l, p, c in holding%}
+                    {%for l, p, c ,d ,r in holding%}
                     {%if c.ShedIn == True %}
                     {%if l.LocoType == 'WDP4D' or l.LocoType == 'WDP4B' or l.LocoType == 'WDG4' or l.LocoType == 'WDG4D'%}
                     <tr class='danger '>
                         <td class='text-primary'>{{forloop.counter}}</td>
                         <td class='text-primary'>{{l.LocoNumber}}</td>
-                        <td class='text-primary'>{{c.LocoFailDate}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.LocoFailDate}} / {{r}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}} / {{d}}</td>
                         <td class='text-primary'>
                             <form method="POST" action="{%url 'addSection' l.id %}">
                                 {% csrf_token %}
@@ -104,8 +104,8 @@ Repair
                     <tr>
                         <th>S.No</th>
                         <th>Loco Number</th>
-                        <th>Failure Date</th>
-                        <th>Shed In Date</th>
+                        <th>Failure Date / Days since Failure</th>
+                        <th>Shed In Date / Days since Shed In</th>
                         <th>Add Section</th>
                         <th>Section</th>
                         
@@ -113,14 +113,14 @@ Repair
                     
                 </thead>
                 <tbody>
-                    {%for l, p, c in holding%}
+                    {%for l, p, c , d , r in holding%}
                     {%if c.ShedIn == True %}
                     {%if l.LocoType == 'WDM3A' or l.LocoType == 'WDM3D' or l.LocoType == 'WDG3A' or l.LocoType == 'WDS6'  %}
                     <tr class='danger '>
                         <td class='text-primary'>{{forloop.counter}}</td>
                         <td class='text-primary'>{{l.LocoNumber}}</td>
-                        <td class='text-primary'>{{c.LocoFailDate}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.LocoFailDate}} / {{r}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}} / {{d}}</td>
                         <td class='text-primary'>
                             <form method="POST" action="{%url 'addSection' l.id %}">
                                 {% csrf_token %}
@@ -162,8 +162,8 @@ Repair
                     <tr>
                         <th>S.No</th>
                         <th>Loco Number</th>
-                        <th>Failure Date</th>
-                        <th>Shed In Date</th>
+                        <th>Failure Date / Days since Failure</th>
+                        <th>Shed In Date / Days since Shed In</th>
                         <th>Add Section</th>
                         <th>Section</th>
                         
@@ -171,14 +171,15 @@ Repair
                     
                 </thead>
                 <tbody>
-                    {%for l, p,c in holding%}
+                    {%for l, p,c,d , r in holding%}
                     {%if c.ShedIn == True %}
                     {%if l.LocoType == 'WAP1' or l.LocoType == 'WAG5' or l.LocoType == 'WAG7'  %}
                     <tr class='danger '>
                         <td class='text-primary'>{{forloop.counter}}</td>
                         <td class='text-primary'>{{l.LocoNumber}}</td>
-                        <td class='text-primary'>{{c.LocoFailDate}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.LocoFailDate}} / {{r}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}} / {{d}}</td>
+                        
                         <td class='text-primary'>
                             <form method="POST" action="{%url 'addSection' l.id %}">
                                 {% csrf_token %}
@@ -222,7 +223,7 @@ Repair
             <tr>
                 <th>S.No</th>
                 <th>Loco Number</th>
-                <th>Failure Date</th>
+                <th>Failure Date / Days since Failure</th>
                 <th>Control Actions</th>
                 
                 
@@ -230,13 +231,13 @@ Repair
             
         </thead>
         <tbody>
-            {%for l, p, c in holding%}
+            {%for l, p, c ,d ,r in holding%}
             {%if c.ShedIn == False %}
             
             <tr class='danger '>
                 <td class='text-primary'>{{forloop.counter}}</td>
-                <td class='text-primary'>{{l.LocoNumber}}</td>
-                <td class='text-primary'>{{c.LocoFailDate}}</td>
+                <td class='text-primary'>{{l.LocoNumber}} </td>
+                <td class='text-primary'>{{c.LocoFailDate}} / {{r}}</td>
                 <td class='text-primary'>
                     <form method="POST" action="{%url 'addShedInData' l.id %}">
                         {% csrf_token %}

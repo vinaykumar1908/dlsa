@@ -5,42 +5,162 @@
 {% block content %}
 <h2 class="center">Repair Board : {{rs.RepSection}}'s work in {{rs.LocoNumber}}.</h2>
 <div class='center'>
-    <a class="btn-lg" style="background-color:Grey; color:White; font-weight: 400; font-size: 15px; margin-right:0px;" href="">New Post</a>
-</div>
-    {% for post in data %}
-    <div class="center bg-warning" style="border-style: inset; border-width: 5px; border-radius: 10px;" >
+  <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'addSectionRepairDetail' rs.id%}">
+    {% csrf_token %}
+    <h5>Add New Booking</h5>
+    <textarea id="BookingDetail" name="BookingDetail" rows="4" cols="40"  placeholder="Booking Detail "  style="background-color: white; color:black" ></textarea>
+      </textarea>
+    <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+</form>
+   </div>
+    {% for post,l,e in data %}
+
+    <div class="card display; flex; align-items: stretch;background-color: #f1f1f1;">
         
-          <div class="media-body" >
-            <div class="article-metadata">
-              <a class="mr-2" href="">{{ post.author }}</a>
-              <small class="text-muted">{{ post.created_date }}</small>
+            <h2>{{post.RepSection.RepSection}} work distribution on {{post.created_date}}</h2>
+            <div style="flex-grow : 8">
+            <div style=" background-color:rgb(220, 191, 49);"> <h4>Booking: {{post.text}}</h4></div> </div>
+            <div class="center">
+            {% if post.waitingForMaterial is True %}
+            <div  style="flex-grow: 2; background-color:rgb(55, 116, 82);">  <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'addJobMaterial' post.id%}">
+                {% csrf_token %}
+                <h5>Add Material Needed</h5>
+                <input type="text"  id="MatNeeded" name="MatNeeded"  placeholder="Material Name"  style="background-color: white; color:black" />
+                <input type="text"  id="QtyNeeded" name="QtyNeeded"  placeholder="Qty Needed "  style="background-color: white; color:black" />
+                <input type="text"  id="Section{{post.id}}" name="Section" placeholder="From Section"  style="background-color: white; color:black" />
+                                <script>
+                                    $( "#Section{{post.id}}" ).autocomplete({
+                                      source: '{%url 'addsectionautocomplete'%}'
+                                        });
+                                    </script> 
+                <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+            </form>
+
+
+<table class="center4">
+    <tr>
+      <th>Material Needed</th>
+      <th>Quantity</th>
+      <th>From Section</th>
+      <th>Requested Since / Received On</th>
+      <th>Recieved ?</th>
+    </tr>
+    {% for mat in l %}
+    <tr>
+      <td>{{mat.MaterialName}}</td>
+      <td>{{mat.Quantity}}</td>
+      <td>{{mat.FromSection}}</td>
+      <td>{{mat.RecordCreationDate}} / {{mat.ReceiptDate}}</td>
+{%if mat.MaterialReceived is False%}
+      <td>{{mat.MaterialReceived}} <br>
+         <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeMatRecRequirement' mat.id%}">
+        {% csrf_token %}  
+        <input type="submit" value="Received !"   >
+      </form></td>
+      {% else %}
+      <td> Material Received </td>
+      {% endif %}
+    </tr>
+    {%endfor%}
+   
+  </table>
+
             </div>
-            <h2><a class="article-title text-white " href="">{{ post.RepSection.RepSection }}</a></h2>
-            <h1><p class="article-content">{{ post.text }}</p></h1>
-<a href="">Comments: </a>
+            
+            {%elif post.waitingForMaterial is False%}
+            <div  style="flex-grow: 2; background-color:rgb(55, 116, 82);"> <h4>
+              Waiting for material ? {{post.waitingForMaterial}}
+              <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeJobMatRequirement' post.id%}">
+                {% csrf_token %}  
+                <input type="submit" value="Add Material"   >
+              </form>
+            </h4>
+          </div>
+            {%endif%}
+
+
+_____________________________________
+{% if post.waitingForShunting is False %}
+            
+            <div  style="flex-grow: 2; background-color:rgb(55, 116, 82);"> <h4>
+              Waiting for Shunting ? {{post.waitingForShunting}}
+              <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeShuntingRequirementStatus' post.id%}">
+                {% csrf_token %}  
+                <input type="submit" value="Add Shunting"   >
+              </form>
+            </h4>
+          </div>
+
+          {%elif post.waitingForShunting is True%}
+          <div  style="flex-grow: 2; background-color:rgb(55, 116, 82);">  <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'addShunting' post.id%}">
+              {% csrf_token %}
+              <h5>Add Shunting Needed</h5>
+              <input type="text"  id="LocationFrom{{post.id}}" name="LocationFrom" placeholder="From"  style="background-color: white; color:black" />
+              <script>
+                  $( "#LocationFrom{{post.id}}" ).autocomplete({
+                    source: '{%url 'addLocationautocomplete'%}'
+                      });
+                  </script>
+              <input type="text"  id="LocationTo{{post.id}}" name="LocationTo" placeholder="To"  style="background-color: white; color:black" />
+                              <script>
+                                  $( "#LocationTo{{post.id}}" ).autocomplete({
+                                    source: '{%url 'addLocationautocomplete'%}'
+                                      });
+                                  </script> 
+              <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+          </form>
+
+
+<table class="center4">
+  <tr>
+    <th>S.No</th>
+    <th>From</th>
+    <th>To </th>
+    <th>Requested Since / Completed On</th>
+    <th>Completed ?</th>
+  </tr>
+  {% for mat in e %}
+  <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{mat.From}}</td>
+    <td>{{mat.To}}</td>
+    <td>{{mat.RecordCreationDate}} / {{mat.CompletionDate}}</td>
+{%if mat.ShuntingStatus is False%}
+    <td>{{mat.ShuntingStatus}} <br>
+       <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeShuntingCompletionStatus' mat.id%}">
+      {% csrf_token %}  
+      <input type="submit" value="Completed !"   >
+    </form></td>
+    {% else %}
+    <td> Shunting Done  </td>
+    {% endif %}
+  </tr>
+  {%endfor%}
+ 
+</table>
 
           </div>
-          
+            {%endif%}
+
+            <div  style="flex-grow: 2; background-color:rgb(6, 241, 112);"> 
+              
+              {%if post.workComplete is False%}
+              <h4>Finalize Work</h4>
+              <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeRepDetCompletionStatus' post.id%}">
+                {% csrf_token %}  
+                <input type="submit" value="Work Complete !"   >
+              </form>
+              {%elif post.workComplete is True%}
+              <h4>Work Completed !</h4>
+              {%endif%}
+            
+            
+            </div>
+        </div>
+        </div>
         
-    </div>
-    <div class=" bg-warning">
-        <table>
-            <th>
-    <tr>
-        <th>S.No</th>
-                    <th>Loco Number</th>
-                    <th>Failure Date</th>
-                    <th>Control Actions</th>
-    </tr>
-            </th>
-            <tbody>
-                <tr class='info '>
-                    <td class='text-primary'>{{forloop.counter}}</td>
-                    <td class='text-primary'>{{forloop.counter}}</td>
-                    <td class='text-primary'>{{forloop.counter}}</td>
-                </tr>
-            </tbody>
-        </table>
+       
+      </div>
     </div>
     
     {% endfor %}

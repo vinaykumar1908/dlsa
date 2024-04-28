@@ -14,6 +14,7 @@ from datetime import timedelta, date
 # from django.views.generic import TemplateView, ListView, DetailView
 # from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from holding.models import Loco2
+from repair.models import ShedIn
 # #from sidingz import models as ZM
 # from django.urls import reverse_lazy
 # from django.db import models
@@ -31,9 +32,10 @@ from django.utils import timezone
 
 @login_required
 def homeView(request):
-     qs = Loco2.objects.filter(Q(LocoType='WDM3A') | Q(LocoType='WDM3D') | Q(LocoType='WDG3A') | Q(LocoType='WDS6') | Q(LocoType='WDS6AD')).count()
-     qs2 = Loco2.objects.filter(Q(LocoType='WDG4') | Q(LocoType='WDG4D') | Q(LocoType='WDP4B') | Q(LocoType='WDP4D')).count()
-     qs3 = Loco2.objects.filter(Q(LocoType='WAP1') | Q(LocoType='WAG5') | Q(LocoType='WAG7')).count()     
+     this_month = datetime.datetime.now().month
+     qs = Loco2.objects.filter(Q(LocoType='WDM3A') | Q(LocoType='WDM3D') | Q(LocoType='WDG3A') | Q(LocoType='WDS6') | Q(LocoType='WDS6AD'))
+     qs2 = Loco2.objects.filter(Q(LocoType='WDG4') | Q(LocoType='WDG4D') | Q(LocoType='WDP4B') | Q(LocoType='WDP4D'))
+     qs3 = Loco2.objects.filter(Q(LocoType='WAP1') | Q(LocoType='WAG5') | Q(LocoType='WAG7'))    
      timerightnow = timezone.now()
 
      context = {
@@ -41,9 +43,9 @@ def homeView(request):
          'time' : timerightnow,
          'b' : qs2,
          'c' : qs3,
-#         'd' : qs4,
-#         'e' : qs5,
-#         'f' : qs6,
+         'i' : qs.filter(LocoFailed=False).count(),
+         'j' : qs2.filter(LocoFailed=False).count(),
+         'k' : qs3.filter(LocoFailed=False).count(),
 #         'g' : today,
 #         'h' : yesterday,
 #         'i' : qs7,
