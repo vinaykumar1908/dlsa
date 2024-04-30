@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.conf import settings
 from holding.models import Loco2
 from section.models import Section
+from locations.models import Locations
+from staff.models import Staff
 class ShedIn(models.Model):
     WAGON_TYPE_CHOICES = ( 
         ("SelectSchedule", "Please Select Schedule / OOC "),  
@@ -45,10 +47,13 @@ class ShedIn(models.Model):
     LocoFile = models.FileField(upload_to='LocoShedIn/%Y/%m/%d/', blank=True, null=True)
     ShedInDate = models.DateTimeField(blank=True, null=True)
     workComplete = models.BooleanField(default=False)
+    WorkCompleteDate = models.DateTimeField(blank=True, null=True)
     ShedOut = models.BooleanField(default=False)
     ShedOutDate = models.DateTimeField(blank=True, null=True)
     ShedIn = models.BooleanField(default=False)
     LocoFailDate = models.DateTimeField(blank=True, null=True)
+    PresentLocation = models.ForeignKey(Locations, on_delete=models.CASCADE, null=True, related_name='locations')
+    
     
     def get_absolute_url(self):
         return reverse('Modules_detail', kwargs={'pk': self.pk})
@@ -101,9 +106,6 @@ class RepairDetail(models.Model):
     waitingForShunting = models.BooleanField(default=False)
     waitingForMaterial = models.BooleanField(default=False)
     waitingForSA= models.BooleanField(default=False)
-    MaterialNeeded = models.CharField(max_length=400, blank=True, null=True)
-    SANeeded = models.CharField(max_length=400, blank=True, null=True)
-    ShuntingNeeded = models.CharField(max_length=400, blank=True, null=True)
     workComplete = models.BooleanField(default=False)
     RepairDetailFile = models.FileField(upload_to='RepairFile/%Y/%m/%d/', blank=True, null=True)
     WorkStartDateTime = models.DateTimeField(blank=True, null=True)
@@ -128,6 +130,7 @@ class RepairDetail(models.Model):
 
     def saveworkcomplete2True(self, *args, **kwargs):
         self.workComplete = True
+        self.WorkEndDateTime = timezone.now()
         super(RepairDetail, self).save(*args, **kwargs)
 
     
@@ -137,3 +140,23 @@ class RepairDetail(models.Model):
 
     def __str__(self):
         return f"{self.RepSection} with date {self.created_date} "
+    
+
+
+class ManNeededInLoco(models.Model):
+    RecordCreationDate = models.DateTimeField(default=timezone.now, null=True)
+    StaffName = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
+    WorkAssigned = models.CharField(null=True, blank=True, max_length=50)
+    ForJob = models.ForeignKey(RepairDetail, on_delete=models.CASCADE, null=True)
+    
+    
+    def get_absolute_url(self):
+        return reverse('Modules_detail', kwargs={'pk': self.pk})
+    
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, related_name='manneededauth1')
+    def __str__(self):
+        return f"{self.StaffName}, {self.StaffName.Designation}, {self.StaffName.TokenNumber}"
+    
+

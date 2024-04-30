@@ -3,7 +3,7 @@
 
 {% endblock head %}
 {% block content %}
-<h2 class="center">Repair Board : {{rs.RepSection}}'s work in {{rs.LocoNumber}}.</h2>
+<h2 class="center">Repair Board : {{rs.RepSection}}'s work in {{rs.LocoNumber}}. Location: {{rs.LocoNumber.PresentLocation}} </h2>
 <div class='center'>
   <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'addSectionRepairDetail' rs.id%}">
     {% csrf_token %}
@@ -13,13 +13,13 @@
     <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
 </form>
    </div>
-    {% for post,l,e in data %}
+    {% for post,l,e,hi in data %}
 
     <div class="card display; flex; align-items: stretch;background-color: #f1f1f1;">
         
-            <h2>{{post.RepSection.RepSection}} work distribution on {{post.created_date}}</h2>
+            <h2>{{forloop.counter}} ) {{post.RepSection.RepSection}} work distribution on {{post.created_date}} {%if post.WorkEndDateTime%} Work End Date : {{post.WorkEndDateTime}} {%endif%}</h2>
             <div style="flex-grow : 8">
-            <div style=" background-color:rgb(220, 191, 49);"> <h4>Booking: {{post.text}}</h4></div> </div>
+            <div style=" background-color:rgb(220, 191, 49);"> <h4>Booking: {{post.text}} </h4></div> </div>
             <div class="center">
             {% if post.waitingForMaterial is True %}
             <div  style="flex-grow: 2; background-color:rgb(55, 116, 82);">  <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'addJobMaterial' post.id%}">
@@ -79,7 +79,6 @@
             {%endif%}
 
 
-_____________________________________
 {% if post.waitingForShunting is False %}
             
             <div  style="flex-grow: 2; background-color:rgb(55, 116, 82);"> <h4>
@@ -139,13 +138,54 @@ _____________________________________
  
 </table>
 
+
           </div>
             {%endif%}
+
+
+
+
+
+
+<div  style="flex-grow: 2; background-color:rgb(55, 116, 82);">  <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'addstafftobooking' post.id%}">
+  {% csrf_token %}
+  <h5>Add ManPower </h5>
+  <input type="text"  id="StaffName{{post.id}}" name="StaffName" placeholder="Staff Name"  style="background-color: white; color:black" />
+  <script>
+      $( "#StaffName{{post.id}}" ).autocomplete({
+        source: '{%url 'addstaffnameautocomplete'%}'
+          });
+      </script>
+  <input type="text"  id="workassigned{{hi.id}}" name="workassigned" placeholder="Work Assigned"  style="background-color: white; color:black" />
+                  
+  <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+</form>
+
+
+<table class="center4">
+<tr>
+<th>S.No</th>
+<th>StaffName</th>
+<th>WorkAssigned </th>
+</tr>
+{% for hi in hi %}
+<tr>
+<td>{{forloop.counter}}</td>
+<td>{{hi.StaffName}}</td>
+<td>{{hi.WorkAssigned}}</td>
+</tr>
+{%endfor%}
+
+</table>
+
+
+</div>
+
 
             <div  style="flex-grow: 2; background-color:rgb(6, 241, 112);"> 
               
               {%if post.workComplete is False%}
-              <h4>Finalize Work</h4>
+              <h4>Work Status : </h4>
               <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeRepDetCompletionStatus' post.id%}">
                 {% csrf_token %}  
                 <input type="submit" value="Work Complete !"   >

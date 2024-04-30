@@ -63,6 +63,59 @@ Home
                 
             </table>
         </div>
+
+        <h3 class="text-dark">Bookings </h3>
+        <div class="overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+            <form method="POST" action="{%url 'BookingDateChecker'%}">
+                {% csrf_token %}
+                <h5>Select Date</h5>
+                <input type="date" id="date1" name="From" >
+                <label for="From"> From</label>
+                    <input type="date" id="date2" name="To" >
+                    
+                    <label for="To"> To</label>
+                 
+                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+            </form>
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Loco Number</th>
+                        <th>Location</th>
+                        <th>Schedule</th>
+                        <th>Section</th>
+                        <th>Booking</th>
+                        <th>Material Needed</th>
+
+                        <th>Shunting Needed</th>
+                        <th>Manpower Booked </th>
+
+                        <th>PDC</th>
+                        
+                    </tr>
+                    {%for j1 ,g1,h1,k1 in Item%}
+                    <tr class='danger'>
+                        <td class='text-primary'>{{forloop.counter}} </td>
+                        <td class='text-primary'>{{j1.RepSection.LocoNumber}} </td>
+                        <td class='text-primary'>{{j1.RepSection.LocoNumber.PresentLocation}} </td>
+                        <td class='text-primary'>{{j1.RepSection.LocoNumber.RepairType}}</td>
+                        <td class='text-primary'>{{j1.RepSection.RepSection}}</td>
+                        <td class='text-primary'>{{j1.text}} </td>
+                        <td class='text-primary'>{%for q in g1 %}{{forloop.counter}} ) {{q}}:<br>Demanded on {{q.RecordCreationDate}},<br>Received on {{q.ReceiptDate}}<br>{%endfor%} </td>
+                        <td class='text-primary'>{%for q in h1 %}{{forloop.counter}} ) {{q}}<br>{%endfor%} </td>
+                        <td class='text-primary'>{%for q in k1 %}{{forloop.counter}} } {{q}}<br>{%endfor%} </td>
+
+                        <td class='text-primary'></td>
+                        
+
+                    </tr>
+                    {%endfor%}
+                </thead>
+                
+                
+            </table>
+        </div>
     </div>
 </div>
 

@@ -4,12 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render
-from repair.models import RepairSection, RepairDetail
+from repair.models import RepairSection, RepairDetail, ManNeededInLoco
 from django.utils import timezone
 from material.models import MatNeededInLoco
 from section.models import Section
 
-from shunting.models import ShuntingNeededInLoco, Locations
+from shunting.models2 import ShuntingNeededInLoco1, Locations
 
 
 @login_required
@@ -33,14 +33,15 @@ def addJobMaterial(request, id):
         Item = list()
         for h in b:
             d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d, r]
+            r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            place_json = [h, d, r,c]
             Item.append(place_json)
    
     timerightnow = timezone.now()
 
     context = {
-        'rs' : c,
+        'rs' : a,
         'time' : timerightnow,
         'data' : Item,
         #  'Type' : "Electrical",
@@ -65,14 +66,16 @@ def ChangeJobMatRequirement(request, id):
         Item = list()
         for h in b:
             d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d, r]
+            r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+
+            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            place_json = [h, d, r,c]
             Item.append(place_json)
    
     timerightnow = timezone.now()
 
     context = {
-        'rs' : c,
+        'rs' : a,
         'time' : timerightnow,
         'data' : Item,
         #  'Type' : "Electrical",
@@ -102,8 +105,10 @@ def ChangeMatRecRequirement(request, id):
         Item = list()
         for h in b:
             d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d, r]
+            r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+
+            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            place_json = [h, d, r,c]
             Item.append(place_json)
    
     timerightnow = timezone.now()

@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render
-from repair.models import RepairSection, RepairDetail
+from repair.models import RepairSection, RepairDetail, ShedIn, ManNeededInLoco
 from django.utils import timezone
 from material.models import MatNeededInLoco
 from section.models import Section
-from shunting.models import Locations, ShuntingNeededInLoco
+from shunting.models2 import Locations, ShuntingNeededInLoco1
+
 
 from django.http import JsonResponse
 
@@ -32,25 +33,32 @@ def addShunting(request, id):
             v.save()
         LocationFrom = Locations.objects.get(LocationName=LocationFrom)
         LocationTo = Locations.objects.get(LocationName=LocationTo)
+
+
        
         a = RepairDetail.objects.get(id=id)
         print(a)
         c = a.RepSection
         d = MatNeededInLoco.objects.all().filter(ForJob=a)
         b = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
-        d = ShuntingNeededInLoco(From=LocationFrom, To=LocationTo, ForJob=a)
+        d = ShuntingNeededInLoco1(From=LocationFrom, To=LocationTo, ForJob=a)
         d.save()
+        
         Item = list()
         for h in b:
             d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d,r]
+            r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+
+            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            
+
+            place_json = [h, d,r,c]
             Item.append(place_json)
    
     timerightnow = timezone.now()
 
     context = {
-        'rs' : c,
+        'rs' : a,
         'time' : timerightnow,
         'data' : Item,
         #  'Type' : "Electrical",
@@ -72,17 +80,20 @@ def ChangeShuntingRequirementStatus(request, id):
         c = a.RepSection
         d = MatNeededInLoco.objects.all().filter(ForJob=a)
         b = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
+        
         Item = list()
         for h in b:
             d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            e = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d,e]
+            e = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+
+            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            place_json = [h, d,e,c]
             Item.append(place_json)
    
     timerightnow = timezone.now()
 
     context = {
-        'rs' : c,
+        'rs' : a,
         'time' : timerightnow,
         'data' : Item,
         #  'Type' : "Electrical",
@@ -100,9 +111,9 @@ def ChangeShuntingCompletionStatus(request, id):
     print('-------id--------')
     print(id)
     if request.method=='POST':
-        a = ShuntingNeededInLoco.objects.get(id=id)
+        a = ShuntingNeededInLoco1.objects.get(id=id)
         print(a)
-        a.save2MatRec()
+        a.save2shuntComplete()
         c = a.ForJob
         z = c.RepSection
         print(c)
@@ -112,8 +123,9 @@ def ChangeShuntingCompletionStatus(request, id):
         Item = list()
         for h in b:
             d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            r = ShuntingNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d, r]
+            r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+            place_json = [h, d, r,c]
             Item.append(place_json)
    
     timerightnow = timezone.now()

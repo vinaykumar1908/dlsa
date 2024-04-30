@@ -29,4 +29,4 @@ class MatNeededInLoco(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, related_name='matneededauth1')
     def __str__(self):
-        return str(f"{self.MaterialName} for {self.ForJob}")
+        return str(f"{self.MaterialName}, Qty {self.Quantity} from {self.FromSection}")

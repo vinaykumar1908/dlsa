@@ -4,16 +4,10 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 from section.models import Section
-from repair.models import RepairDetail
+from repair.models import RepairDetail, ShedIn
+from locations.models import Locations
 
-
-class Locations(models.Model):
-    LocationName = models.CharField( max_length=50, unique=True)
-    def __str__(self):
-        return str(self.LocationName)
-
-
-class ShuntingNeededInLoco(models.Model):
+class ShuntingNeededInLoco1(models.Model):
     RecordCreationDate = models.DateTimeField(default=timezone.now, null=True)
     CompletionDate = models.DateTimeField( blank=True, null=True)
     From = models.ForeignKey(Locations, on_delete=models.CASCADE, null=True, related_name='shuntfrom')
@@ -28,12 +22,16 @@ class ShuntingNeededInLoco(models.Model):
     
     
 
-    def save2MatRec(self, *args, **kwargs):
+    def save2shuntComplete(self, *args, **kwargs):
         self.ShuntingStatus = True
         self.CompletionDate = timezone.now()
+        shedin = ShedIn.objects.get(LocoNumber=self.ForJob.RepSection.LocoNumber.LocoNumber)
+        shedin.PresentLocation = self.To
+        shedin.save()
+        print(shedin)
         super().save(*args, **kwargs)
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, related_name='shuntauth1')
     def __str__(self):
-        return str(f"From {self.From} To {self.To} for {self.ForJob}")
+        return str(f"From {self.From} To {self.To}")

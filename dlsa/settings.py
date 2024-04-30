@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'card.apps.CardConfig',
     'material.apps.MaterialConfig',
     'shunting.apps.ShuntingConfig',
+    'locations.apps.LocationsConfig',
     'import_export',
     "bootstrap4",
     "bootstrap_datepicker_plus",

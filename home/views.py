@@ -13,8 +13,11 @@ from datetime import timedelta, date
 # from django.shortcuts import render
 # from django.views.generic import TemplateView, ListView, DetailView
 # from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from material.models import MatNeededInLoco
+from staff.models import Staff
 from holding.models import Loco2
-from repair.models import ShedIn
+from shunting.models2 import ShuntingNeededInLoco1
+from repair.models import ShedIn, RepairDetail, ManNeededInLoco
 # #from sidingz import models as ZM
 # from django.urls import reverse_lazy
 # from django.db import models
@@ -37,6 +40,19 @@ def homeView(request):
      qs2 = Loco2.objects.filter(Q(LocoType='WDG4') | Q(LocoType='WDG4D') | Q(LocoType='WDP4B') | Q(LocoType='WDP4D'))
      qs3 = Loco2.objects.filter(Q(LocoType='WAP1') | Q(LocoType='WAG5') | Q(LocoType='WAG7'))    
      timerightnow = timezone.now()
+     print(datetime.datetime.now())
+     today = date.today()
+     print(timerightnow)
+     qs4 = RepairDetail.objects.all().filter(created_date__range=[today, timerightnow])
+     Item = list()
+     for h in qs4:
+         d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+         r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+         c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+
+         place_json = [h, d, r, c]
+         Item.append(place_json)
+     print(qs4)
 
      context = {
          'a' : qs,
@@ -46,6 +62,7 @@ def homeView(request):
          'i' : qs.filter(LocoFailed=False).count(),
          'j' : qs2.filter(LocoFailed=False).count(),
          'k' : qs3.filter(LocoFailed=False).count(),
+         'Item' : Item,
 #         'g' : today,
 #         'h' : yesterday,
 #         'i' : qs7,
@@ -117,3 +134,62 @@ def homeView(request):
 #     #b = qs2.aggregate(Sum('TrafficDetention'))
 
 
+
+
+
+@login_required
+def BookingDateChecker(request):
+     this_month = datetime.datetime.now().month
+     qs = Loco2.objects.filter(Q(LocoType='WDM3A') | Q(LocoType='WDM3D') | Q(LocoType='WDG3A') | Q(LocoType='WDS6') | Q(LocoType='WDS6AD'))
+     qs2 = Loco2.objects.filter(Q(LocoType='WDG4') | Q(LocoType='WDG4D') | Q(LocoType='WDP4B') | Q(LocoType='WDP4D'))
+     qs3 = Loco2.objects.filter(Q(LocoType='WAP1') | Q(LocoType='WAG5') | Q(LocoType='WAG7'))    
+     timerightnow = timezone.now()
+     print(datetime.datetime.now())
+     today = date.today()
+     if request.method=='POST':
+        date1 = request.POST.get('From')
+        date2 = request.POST.get('To')
+        print(date1)
+        print(date2)
+        qs4 = RepairDetail.objects.all().filter(created_date__range=[date1, date2])
+     Item = list()
+     for h in qs4:
+         d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+         r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+         c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
+
+         place_json = [h, d, r, c]
+         Item.append(place_json)
+     print(qs4)
+
+     context = {
+         'a' : qs,
+         'time' : timerightnow,
+         'b' : qs2,
+         'c' : qs3,
+         'i' : qs.filter(LocoFailed=False).count(),
+         'j' : qs2.filter(LocoFailed=False).count(),
+         'k' : qs3.filter(LocoFailed=False).count(),
+         'Item' : Item,
+#         'g' : today,
+#         'h' : yesterday,
+#         'i' : qs7,
+#         'j' : qs8,
+#         'k' : qs9,
+#         'l' : qs10,
+#         'm' : qs11,
+#         'n' : qs12,
+#         'o' : qs13,
+#         'p' : qs14,
+#         'q' : qs15,
+#         'r' : qs16,
+#         's' : qs17,
+#         't' : qs18,
+#         'u' : qs19,
+#         'v' : qs20,
+#         'w' : qs21,
+        
+        
+        
+    }
+     return render(request, 'home/home.html', context)

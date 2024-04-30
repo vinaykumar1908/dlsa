@@ -1,0 +1,202 @@
+{%extends 'charts/base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{%block title%}
+Repair
+{%endblock title%}
+
+
+{%block content%}
+
+<h4 style="font-family:'Apple Chancery'; font-size: 32px;">Time: {{time}} </h4>
+
+
+
+<div class="container-fluid">
+    <div class="row" style="background-color: teal;" style="overflow-x:auto;">
+        <div class="">
+            <h3 class="text-dark">Loco Overhauling Report </h3>
+            <hr>
+            </div>
+        </div>
+        <h4>Basic Details</h4>
+        <div class="overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Loco Number</th>
+                        <th>Repair Schedule / OOC</th>
+                        <th>Failure Date / Shed In Date</th>
+                        <th>Work Status</th>
+                        <th>Shed Out ? / Shed Out Date</th>
+                        
+                    </tr>
+                    
+                    <tr class='danger'>
+                        <td class='text-primary'>{{rs.LocoNumber}}</td>
+                        <td class='text-primary'>{{rs.RepairType}}</td>
+                        <td class='text-primary'>{{rs.LocoFailDate}} / {{rs.ShedInDate}}</td>
+                        <td class='text-primary'>{%if rs.workComplete is False%}Work Pending {%else%} Work Completed on {{rs.WorkCompleteDate}} {%endif%}</td>
+                        <td class='text-primary'>{%if rs.ShedOut is False%}Shed Out Pending {%else%} Shed Out on {{rs.ShedOutDate}} {%endif%}</td>
+                        
+                        
+
+                    </tr>
+                    
+                </thead>
+                
+             
+                
+            </table>
+
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Repair Schedule / OOC</th>
+                        {%if rs.workComplete is False%}<th> Enter Work Complete Date</th>{%else%} {%endif%}
+                        {%if rs.ShedOut is False%}<th> Enter Shed Out Date</th>{%else%} {%endif%}
+                        
+                    </tr>
+                    
+                    <tr class='danger'>
+                        <td class='text-primary'><form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'Schedule' rs.id%}">
+                            {% csrf_token %}
+                            <label for="Schedule">Choose a Schedule:</label>
+                            <select name="Schedule" id="Schedule">
+                                <option value="IOH">IOH</option>
+                                <option value="POH">POH</option>
+                                <option value="TOH">TOH</option>
+                                <option value="MTR">MTR</option>
+                                <option value="Y1">Y1</option>
+                                <option value="Y2">Y2</option>
+                                <option value="3Y">3Y</option>
+                                <option value="Y4">Y4</option>
+                                <option value="Y5">Y5</option>
+                                <option value="6Y">6Y</option>
+                                <option value="Alco-M12">Alco-M12</option>
+                                <option value="Alco-M18">Alco-M18</option>
+                                <option value="Alco-M24">Alco-M24</option>
+                                <option value="Alco-M30">Alco-M30</option>
+                                <option value="Alco-M36">Alco-M36</option>
+                                <option value="Alco-M72">Alco-M72</option>
+                                <option value="Alco-M108">Alco-M108</option>
+                                <option value="IA1">IA1</option>
+                                <option value="IB">IB</option>
+                                <option value="IA2">IA2</option>
+                                <option value="IC">IC</option>
+                                <option value="HHP-30D">HHP-30D</option>
+                                <option value="HHP-90D">HHP-90D</option>
+                                <option value="HHP-180D">HHP-180D</option>
+                                <option value="Alco-Trip(30D)">Alco-Trip(30D)</option>
+                                <option value="Alco-M(60D)">Alco-M(60D)</option>
+                                <option value="Alco-M2(120D)">Alco-M2(120D)</option>
+                                <option value="Alco-M6(180D)">Alco-M6(180D)</option>
+                                <option value="OOC">OOC</option>
+                              </select>
+                              <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+                   
+                        
+                            </form></td>
+                            {%if rs.workComplete is False%}    <td class='text-primary'><form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'WCD' rs.id%}">
+                            {% csrf_token %}
+                          <label for="QtyNeeded"> Work Complete Date</label>
+                        <input type="datetime-local"  id="WCD" name="WCD"    style="background-color: white; color:black" />
+                        
+                        <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+               
+                    
+                    </form></td>{%else%} {%endif%}
+                    {%if rs.ShedOut is False%} <td class='text-primary'><form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'SOD' rs.id%}">
+                            {% csrf_token %}
+                          <label for="QtyNeeded">Choose a Shed Out Date</label>
+                        <input type="datetime-local"  id="SOD" name="SOD"    style="background-color: white; color:black" />
+                        
+                        <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+               
+                    
+                    </form></td>{%else%} {%endif%}
+                        
+                        
+
+                    </tr>
+                    
+                </thead>
+                
+             
+                
+            </table>
+            
+                
+                
+            </div>
+
+<div class="overflow-auto w-100 h-10 center3" style="background-color:rgb(116, 180, 244);">
+    <h3>Sectional Bookings</h3>
+
+
+
+
+    <div class="overflow-auto w-100 h-10 center3" style="background-color:rgb(116, 180, 244);">
+        {%for a,b,c in data%}
+        <h3>{{a.RepSection}}</h3>
+
+        <table class="table table-bordered ">
+            <thead>
+                <tr>
+                    <th>Booking</th>
+                    <th>Date</th>
+                    <th>Material Needed</th>
+                    <th>Shunting Needed</th>
+                    <th>Work Status</th>
+                    
+                    
+                </tr>
+                {%for f,g,h in c%}
+                {%if f.RepSection.id is a.id%}
+                <tr class='danger'>
+                    
+                    <td class='text-primary'>{{f.text}}</td>
+                    <td class='text-primary'>{{f.created_date}}</td>
+                    <td class='text-primary border'>
+                        {%for e in g %}
+                        {{e.MaterialName}}, Qty: {{e.Quantity}} no required from {{e.FromSection}},<br> Provided on {{e.ReceiptDate}}<br>
+                        {%endfor%}
+
+
+                    </td>
+                    <td class='text-primary'>{%for e in h %}
+                        Shunting needed from {{e.From}} to {{e.To}}. <br> Demanded since {{e.RecordCreationDate}} . <br>Completed on {%if e.CompletionDate is None %} ________{%else%} {{e.CompletionDate}}{%endif%}<br>
+                        {%endfor%}</td>
+                    <td class='text-primary'>{%if f.workComplete is False%}Work Pending  {%else%} Work Completed on {{f.WorkEndDateTime}} {%endif%}</td>
+                    
+                    
+
+                </tr>
+                {%endif%}
+                {%endfor%}
+            </thead>
+        </table>
+{%endfor%}
+    </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+            
+                {%endblock content%}
+                {%block afterbody%}
+                
+                {%endblock afterbody%}
+
+
+
+
+            

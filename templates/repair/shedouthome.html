@@ -3,7 +3,7 @@
 {% load static %}
 
 {%block title%}
-Repair
+ShedOut
 {%endblock title%}
 
 
@@ -15,7 +15,7 @@ Repair
 <div class="container-fluid">
     <div class="row" style="background-color: teal;" style="overflow-x:auto;">
         <div class="">
-            <h3 class="text-dark">Shed In Report </h3>
+            <h3 class="text-dark">Shed Out Report </h3>
             <hr>
 
         </div>
@@ -41,11 +41,9 @@ Repair
                     
                     <tr>
                         <th>Loco Number</th>
-                        <th>Failure Date / Days since Failure</th>
-                        <th>Shed In Date / Days since Shed In</th>
-                        <th>Schedule</th>
-                        <th>Location</th>
-                        <th>Add Section</th>
+                        <th>Failure Date</th>
+                        <th>Shed In Date</th>
+                        <th>Shed Out Date </th>
                         <th>Section</th>
                         
                     </tr>
@@ -59,26 +57,10 @@ Repair
                         <td class='text-primary'><a class="dropdown-item"
                             style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
                             href="{% url 'repairdetailhome' c.id%}">{{l.LocoNumber}}</a></td>
-                        <td class='text-primary'>{{c.LocoFailDate}} <br> {{r}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}} <br> {{d}}</td>
-
-                        <td class='text-primary'>{{c.RepairType}} </td>
-                        <td class='text-primary'>{{c.PresentLocation}} </td>
-                        <td class='text-primary'>
-                            <form method="POST" action="{%url 'addSection' l.id %}">
-                                {% csrf_token %}
-                                
-                                <input type="text" id="H{{l.id}}" name="addsection1"  style="background-color: white; color:black" />
-                                <script>
-                                    $( "#H{{l.id}}" ).autocomplete({
-                                      source: '{%url 'addsectionautocomplete'%}'
-                                        });
-                                    </script>
-                                 
-                                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
-                            </form>
-                            
-                        </td>
+                        <td class='text-primary'>{{c.LocoFailDate}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.ShedOutDate}}</td>
+                        
                         
                         {%for x in p%}
                         <td class='text-primary'><a class="dropdown-item"
@@ -106,10 +88,9 @@ Repair
                 <thead>
                     <tr>
                         <th>Loco Number</th>
-                        <th>Failure Date / Days since Failure</th>
-                        <th>Shed In Date / Days since Shed In</th>
-                        <th>Schedule</th>
-                        <th>Location</th>
+                        <th>Failure Date</th>
+                        <th>Shed In Date</th>
+                        <th>Shed Out Date</th>
                         <th>Add Section</th>
                         <th>Section</th>
                         
@@ -123,27 +104,11 @@ Repair
                     <tr class='danger '>
                         <td class='text-primary'><a class="dropdown-item"
                             style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'repairdetailhome' c.id%}">{{l.LocoNumber}}</a></td>                        
-                            <td class='text-primary'>{{c.LocoFailDate}} <br> {{r}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}} <br> {{d}}</td>
-
-                        <td class='text-primary'>{{c.RepairType}} </td>
-                        <td class='text-primary'>{{c.PresentLocation}} </td>
-                        <td class='text-primary'>
-                            <form method="POST" action="{%url 'addSection' l.id %}">
-                                {% csrf_token %}
-                                
-                                <input type="text" id="A{{l.id}}" name="addsection1"  style="background-color: white; color:black" />
-                                
-                                <script>
-                                    $( "#A{{l.id}}" ).autocomplete({
-                                      source: '{%url 'addsectionautocomplete'%}'
-                                        });
-                                    </script>
-                                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
-                            </form>
-                            
-                        </td>
+                            href="{% url 'repairdetailhome' l.id%}">{{l.LocoNumber}}</a></td>                        
+                            <td class='text-primary'>{{c.LocoFailDate}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.ShedOutDate}}</td>
+                        
                         
                         {%for x in p%}
                         <td class='text-primary'><a class="dropdown-item"
@@ -169,10 +134,9 @@ Repair
                 <thead>
                     <tr>
                         <th>Loco Number</th>
-                        <th>Failure Date / Days since Failure</th>
-                        <th>Shed In Date / Days since Shed In</th>
-                        <th>Schedule</th>
-                        <th>Location</th>
+                        <th>Failure Date</th>
+                        <th>Shed In Date</th>
+                        <th>Shed Out Date</th>
                         <th>Add Section</th>
                         <th>Section</th>
                         
@@ -186,27 +150,12 @@ Repair
                     <tr class='danger '>
                         <td class='text-primary'><a class="dropdown-item"
                             style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'repairdetailhome' c.id%}">{{l.LocoNumber}}</a></td>                       
-                             <td class='text-primary'>{{c.LocoFailDate}} <br> {{r}}</td>RepairType
-                        <td class='text-primary'>{{c.ShedInDate}} <br> {{d}}</td>
-                        <td class='text-primary'>{{c.RepairType}} </td>
-                        <td class='text-primary'>{{c.PresentLocation}} </td>
+                            href="{% url 'repairdetailhome' l.id%}">{{l.LocoNumber}}</a></td>                       
+                             <td class='text-primary'>{{c.LocoFailDate}}</td>
+                        <td class='text-primary'>{{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.ShedOutDate}}</td>
                         
-                        <td class='text-primary'>
-                            <form method="POST" action="{%url 'addSection' l.id %}">
-                                {% csrf_token %}
-                                
-                                <input type="text" id="E{{l.id}}" name="addsection1"  style="background-color: white; color:black" />
-                                <script>
-                                    $( "#E{{l.id}}" ).autocomplete({
-                                      source: '{%url 'addsectionautocomplete'%}'
-                                        });
-                                    </script>
-                                 
-                                <input type="submit" value="save" style="background-color: lightcoral; color:black" />
-                            </form>
-                            
-                        </td>
+                        
                         
                         {%for x in p%}
                         <td class='text-primary'><a class="dropdown-item"
@@ -247,7 +196,7 @@ Repair
             
             <tr class='danger '>
                 <td class='text-primary'>{{l.LocoNumber}} </td>
-                <td class='text-primary'>{{c.LocoFailDate}} <br> {{r}}</td>
+                <td class='text-primary'>{{c.LocoFailDate}} / {{r}}</td>
                 <td class='text-primary'>
                     <form method="POST" action="{%url 'addShedInData' l.id %}">
                         {% csrf_token %}

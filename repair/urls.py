@@ -3,6 +3,8 @@ from repair import views
 
 urlpatterns = [
     path('repair/', views.repairhome, name='repairhome'),
+    path('shedouthome/', views.shedouthome, name='shedouthome'),
+    path('repairdetailhome/<int:id>/', views.repairdetailhome, name='repairdetailhome'),
     path('addSection/<int:id>/', views.addSection, name='addSection'),
     path('addShedInData/<int:id>/', views.addShedInData, name='addShedInData'),
     path('addFailedLoco/', views.addFailedLoco, name='addFailedLoco'),
@@ -14,6 +16,12 @@ urlpatterns = [
     path('viewSectionRepairDetail/<int:id>/', views.viewSectionRepairDetail, name='viewSectionRepairDetail'),
     path('addSectionRepairDetail/<int:id>/', views.addSectionRepairDetail, name='addSectionRepairDetail'),
     path('ChangeRepDetCompletionStatus/<int:id>/', views.ChangeRepDetCompletionStatus, name='ChangeRepDetCompletionStatus'),
+
+    path('Schedule/<int:id>/', views.Schedule, name='Schedule'),
+    path('WCD/<int:id>/', views.WCD, name='WCD'),
+    path('SOD/<int:id>/', views.SOD, name='SOD'),
+    path('addstafftobooking/<int:id>/', views.addstafftobooking, name='addstafftobooking'),
+
 ]
 
 

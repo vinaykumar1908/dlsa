@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 from section.models import Section
+
+
 class Staff(models.Model):
     Desig_TYPE_CHOICES = ( 
         ("SelectDesig", "Please Select Designation "),  
@@ -32,3 +34,5 @@ class Staff(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, related_name='staffauth1')
     def __str__(self):
         return str(self.StaffName)
+    
+

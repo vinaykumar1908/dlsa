@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from repair.models import ShedIn, RepairSection, RepairDetail
+from repair.models import ShedIn, RepairSection, RepairDetail, ManNeededInLoco
 
 
 
@@ -17,3 +17,5 @@ class RepairDetailAdmin(admin.ModelAdmin):
 admin.site.register(ShedIn, ShedInAdmin)
 admin.site.register(RepairSection, RepairSectionAdmin)
 admin.site.register(RepairDetail, RepairDetailAdmin)
+
+admin.site.register(ManNeededInLoco)
