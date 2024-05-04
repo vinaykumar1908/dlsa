@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 from section.models import Section
-
+import random
+def random_string():
+    return str(random.randint(10000, 99999))
 
 class Staff(models.Model):
     Desig_TYPE_CHOICES = ( 
@@ -21,7 +23,7 @@ class Staff(models.Model):
 
     
     StaffName = models.CharField(max_length=100)
-    TokenNumber = models.IntegerField(null=True, blank=True)
+    TokenNumber = models.IntegerField(default=random_string, unique=True)
     Designation = models.CharField(
         max_length=11, choices=Desig_TYPE_CHOICES, default='SelectDesig', null=True, blank=True)
     DOB = models.DateField(null=True)

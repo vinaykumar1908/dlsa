@@ -47,10 +47,12 @@ class ShedIn(models.Model):
     LocoFile = models.FileField(upload_to='LocoShedIn/%Y/%m/%d/', blank=True, null=True)
     ShedInDate = models.DateTimeField(blank=True, null=True)
     workComplete = models.BooleanField(default=False)
+    PDC = models.DateTimeField(blank=True, null=True)
     WorkCompleteDate = models.DateTimeField(blank=True, null=True)
     ShedOut = models.BooleanField(default=False)
     ShedOutDate = models.DateTimeField(blank=True, null=True)
     ShedIn = models.BooleanField(default=False)
+    PDCbool = models.BooleanField(default=False)
     LocoFailDate = models.DateTimeField(blank=True, null=True)
     PresentLocation = models.ForeignKey(Locations, on_delete=models.CASCADE, null=True, related_name='locations')
     
@@ -82,6 +84,8 @@ class RepairSection(models.Model):
         #Date = getattr(Date, 'ShedInDate')
         print(Date)
         self.Date = str(d)
+        super(RepairSection, self).save(*args, **kwargs)
+    def save2(self, *args, **kwargs):
         super(RepairSection, self).save(*args, **kwargs)
 
     
@@ -157,6 +161,6 @@ class ManNeededInLoco(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, related_name='manneededauth1')
     def __str__(self):
-        return f"{self.StaffName}, {self.StaffName.Designation}, {self.StaffName.TokenNumber}"
+        return f"{self.StaffName},  D: {self.StaffName.Designation}, TNo: {self.StaffName.TokenNumber}"
     
 

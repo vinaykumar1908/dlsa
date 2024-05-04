@@ -21,48 +21,33 @@ def addShunting(request, id):
     print('-------id--------')
     print(id)
     if request.method=='POST':
-        print("getting post")
-        print('printing request')
-        LocationFrom = request.POST.get('LocationFrom')
         LocationTo = request.POST.get('LocationTo')
-        if Locations.objects.get(LocationName=LocationFrom) is None:
-            v = Locations(LocationName=LocationFrom)
-            v.save()
         if Locations.objects.get(LocationName=LocationTo) is None:
             v = Locations(LocationName=LocationTo)
             v.save()
-        LocationFrom = Locations.objects.get(LocationName=LocationFrom)
         LocationTo = Locations.objects.get(LocationName=LocationTo)
-
-
-       
         a = RepairDetail.objects.get(id=id)
         print(a)
         c = a.RepSection
+        er = c.LocoNumber.PresentLocation
+        print(er)
         d = MatNeededInLoco.objects.all().filter(ForJob=a)
         b = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
-        d = ShuntingNeededInLoco1(From=LocationFrom, To=LocationTo, ForJob=a)
+        d = ShuntingNeededInLoco1(From=er, To=LocationTo, ForJob=a)
         d.save()
-        
-        Item = list()
-        for h in b:
-            d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            r = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-
-            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            
-
-            place_json = [h, d,r,c]
-            Item.append(place_json)
-   
+    ba = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
     timerightnow = timezone.now()
-
+    Item = list()
+    for ha in ba:
+        da = MatNeededInLoco.objects.all().filter(ForJob=ha).order_by('RecordCreationDate')
+        ra = ShuntingNeededInLoco1.objects.all().filter(ForJob=ha).order_by('RecordCreationDate')
+        ca = ManNeededInLoco.objects.all().filter(ForJob=ha).order_by('RecordCreationDate')
+        place_json = [ha, da,ra,ca]
+        Item.append(place_json)
     context = {
-        'rs' : a,
+        'rs' : c,
         'time' : timerightnow,
         'data' : Item,
-        #  'Type' : "Electrical",
-
     }
     return render(request, 'repair/repairdetail.html', context)
 
@@ -78,26 +63,19 @@ def ChangeShuntingRequirementStatus(request, id):
         a = RepairDetail.objects.get(id=id)
         a.saveShunt2True()
         c = a.RepSection
-        d = MatNeededInLoco.objects.all().filter(ForJob=a)
-        b = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
-        
-        Item = list()
-        for h in b:
-            d = MatNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            e = ShuntingNeededInLoco1.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-
-            c = ManNeededInLoco.objects.all().filter(ForJob=h).order_by('RecordCreationDate')
-            place_json = [h, d,e,c]
-            Item.append(place_json)
-   
+        ba = RepairDetail.objects.all().filter(RepSection=c).order_by("created_date")
     timerightnow = timezone.now()
-
+    Item = list()
+    for ha in ba:
+        da = MatNeededInLoco.objects.all().filter(ForJob=ha).order_by('RecordCreationDate')
+        ra = ShuntingNeededInLoco1.objects.all().filter(ForJob=ha).order_by('RecordCreationDate')
+        ca = ManNeededInLoco.objects.all().filter(ForJob=ha).order_by('RecordCreationDate')
+        place_json = [ha, da,ra,ca]
+        Item.append(place_json)
     context = {
-        'rs' : a,
+        'rs' : c,
         'time' : timerightnow,
         'data' : Item,
-        #  'Type' : "Electrical",
-
     }
     return render(request, 'repair/repairdetail.html', context)
 

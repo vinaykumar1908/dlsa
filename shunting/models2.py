@@ -34,4 +34,4 @@ class ShuntingNeededInLoco1(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True, related_name='shuntauth1')
     def __str__(self):
-        return str(f"From {self.From} To {self.To}")
+        return str(f"{self.From} ------|> {self.To}")

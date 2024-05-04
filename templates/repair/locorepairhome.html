@@ -16,7 +16,7 @@ Repair
 <div class="container-fluid">
     <div class="row" style="background-color: teal;" style="overflow-x:auto;">
         <div class="">
-            <h3 class="text-dark">Loco Overhauling Report </h3>
+            <h3 class="text-dark">Loco Overhauling Report of {{rs.LocoNumber}}</h3>
             <hr>
             </div>
         </div>
@@ -28,6 +28,7 @@ Repair
                         <th>Loco Number</th>
                         <th>Repair Schedule / OOC</th>
                         <th>Failure Date / Shed In Date</th>
+                        <th>PDC</th>
                         <th>Work Status</th>
                         <th>Shed Out ? / Shed Out Date</th>
                         
@@ -37,6 +38,7 @@ Repair
                         <td class='text-primary'>{{rs.LocoNumber}}</td>
                         <td class='text-primary'>{{rs.RepairType}}</td>
                         <td class='text-primary'>{{rs.LocoFailDate}} / {{rs.ShedInDate}}</td>
+                        <td class='text-primary'>{{rs.PDC}}</td>
                         <td class='text-primary'>{%if rs.workComplete is False%}Work Pending {%else%} Work Completed on {{rs.WorkCompleteDate}} {%endif%}</td>
                         <td class='text-primary'>{%if rs.ShedOut is False%}Shed Out Pending {%else%} Shed Out on {{rs.ShedOutDate}} {%endif%}</td>
                         
@@ -54,6 +56,7 @@ Repair
                 <thead>
                     <tr>
                         <th>Repair Schedule / OOC</th>
+                        <th> Enter PDC</th>
                         {%if rs.workComplete is False%}<th> Enter Work Complete Date</th>{%else%} {%endif%}
                         {%if rs.ShedOut is False%}<th> Enter Shed Out Date</th>{%else%} {%endif%}
                         
@@ -98,6 +101,15 @@ Repair
                    
                         
                             </form></td>
+                                <td class='text-primary'><form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'PDC' rs.id%}">
+                                {% csrf_token %}
+                              <label for="PDC"> PDC</label>
+                            <input type="datetime-local"  id="PDC" name="PDC"    style="background-color: white; color:black" />
+                            
+                            <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+                   
+                        
+                        </form></td>
                             {%if rs.workComplete is False%}    <td class='text-primary'><form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'WCD' rs.id%}">
                             {% csrf_token %}
                           <label for="QtyNeeded"> Work Complete Date</label>
@@ -148,11 +160,12 @@ Repair
                     <th>Date</th>
                     <th>Material Needed</th>
                     <th>Shunting Needed</th>
+                    <th>Manpower Needed</th>
                     <th>Work Status</th>
                     
                     
                 </tr>
-                {%for f,g,h in c%}
+                {%for f,g,h,i in c%}
                 {%if f.RepSection.id is a.id%}
                 <tr class='danger'>
                     
@@ -160,14 +173,15 @@ Repair
                     <td class='text-primary'>{{f.created_date}}</td>
                     <td class='text-primary border'>
                         {%for e in g %}
-                        {{e.MaterialName}}, Qty: {{e.Quantity}} no required from {{e.FromSection}},<br> Provided on {{e.ReceiptDate}}<br>
+                        {{forloop.counter}}) {{e.MaterialName}}, Qty: {{e.Quantity}} no required from {{e.FromSection}},<br> Provided on {{e.ReceiptDate}}<br>
                         {%endfor%}
 
 
                     </td>
                     <td class='text-primary'>{%for e in h %}
-                        Shunting needed from {{e.From}} to {{e.To}}. <br> Demanded since {{e.RecordCreationDate}} . <br>Completed on {%if e.CompletionDate is None %} ________{%else%} {{e.CompletionDate}}{%endif%}<br>
+                       {{forloop.counter}}) {{e.From}} ------|> {{e.To}}. <br> Requested: {{e.RecordCreationDate}} . <br>Completion: {%if e.CompletionDate is None %} ________{%else%} {{e.CompletionDate}}{%endif%}<br>
                         {%endfor%}</td>
+                        <td class='text-primary'>{%for q in i %}{{forloop.counter}} } {{q}}<br>{%endfor%}</td>
                     <td class='text-primary'>{%if f.workComplete is False%}Work Pending  {%else%} Work Completed on {{f.WorkEndDateTime}} {%endif%}</td>
                     
                     

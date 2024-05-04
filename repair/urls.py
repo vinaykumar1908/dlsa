@@ -18,10 +18,13 @@ urlpatterns = [
     path('ChangeRepDetCompletionStatus/<int:id>/', views.ChangeRepDetCompletionStatus, name='ChangeRepDetCompletionStatus'),
 
     path('Schedule/<int:id>/', views.Schedule, name='Schedule'),
+    path('Schedule2/<int:id>/', views.Schedule2, name='Schedule2'),
     path('WCD/<int:id>/', views.WCD, name='WCD'),
     path('SOD/<int:id>/', views.SOD, name='SOD'),
+    path('PDC/<int:id>/', views.PDC, name='PDC'),
     path('addstafftobooking/<int:id>/', views.addstafftobooking, name='addstafftobooking'),
-
+    path('FilterShedOuts/', views.FilterShedOuts, name='FilterShedOuts'),
+    path('FilterShedIns/', views.FilterShedIns, name='FilterShedIns'),
 ]
 
 

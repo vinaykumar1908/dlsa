@@ -3,48 +3,57 @@
 {% load static %}
 
 {%block title%}
-ShedOut
+Shed Out Home
 {%endblock title%}
 
 
 {%block content%}
 <h4 style="font-family:'Apple Chancery'; font-size: 32px;">Time: {{time}} </h4>
 
-
+<table class="center4">
+    <tr>
+        <th>Filter By Date</th>
+        </tr>
+        
+        <tr>
+        <td><form method="POST" action="{%url 'FilterShedOuts'%}">
+            {% csrf_token %}
+            <input type="date" id="date1" name="date1"  style="background-color: white; color:black" />
+            <label for="date1">From </label>
+            <input type="date" id="date2" name="date2"  style="background-color: white; color:black" />
+                <label for="date2">To </label>
+                    <select name="datetype" id="datetype">
+                        <option value="LocoFailDate">Failure Date</option>
+                        <option value="ShedInDate">Shed In Date</option>
+                        <option value="ShedOut">Shed Out</option>
+                        
+                      </select>
+                      
+            <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+        </form></td>
+        </tr>
+</table>
 
 <div class="container-fluid">
     <div class="row" style="background-color: teal;" style="overflow-x:auto;">
         <div class="">
             <h3 class="text-dark">Shed Out Report </h3>
             <hr>
-
+            
         </div>
         <h3>HHP</h3>
         <div class="center2 table-wrapper-scroll-y my-custom-scrollbar overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
             <table class="table table-bordered ">
-                <form method="POST" action="{%url 'addFailedLoco'%}">
-                    {% csrf_token %}
-                    <h5>Add Failed Loco Number</h5>
-                    <input type="text" id="FailLoco" name="FailLoco"  style="background-color: white; color:black" />
-                    <script>
-                        $( "#FailLoco" ).autocomplete({
-                          source: '{%url 'addLocoautocomplete'%}'
-                            });
-                        </script>
-                        <input type="datetime-local" id="date1" name="ShedInDate" >
-                        <label for="date1">Failure Date</label>
-                          
-                     
-                    <input type="submit" value="save" style="background-color: lightcoral; color:black" />
-                </form>
+                
                 <thead>
                     
                     <tr>
                         <th>Loco Number</th>
-                        <th>Failure Date</th>
-                        <th>Shed In Date</th>
+                        <th>Failure Date / Shed In Date</th>
+                        
                         <th>Shed Out Date </th>
-                        <th>Section</th>
+                        <th>Schedule</th>
+                        
                         
                     </tr>
                     
@@ -57,16 +66,11 @@ ShedOut
                         <td class='text-primary'><a class="dropdown-item"
                             style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
                             href="{% url 'repairdetailhome' c.id%}">{{l.LocoNumber}}</a></td>
-                        <td class='text-primary'>{{c.LocoFailDate}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}}</td>
-                        <td class='text-primary'>{{c.ShedOutDate}}</td>
-                        
-                        
-                        {%for x in p%}
-                        <td class='text-primary'><a class="dropdown-item"
-                            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'viewSectionRepairDetail' x.id%}">{{x.RepSection}} </a></td>
-                        {%endfor%}
+                        <td class='text-primary'>{{c.LocoFailDate}} <br> {{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.ShedOutDate}} </td>
+
+                        <td class='text-primary'>{{c.RepairType}} </td>
+                       
                         
                     </tr>
                     {%endif%}
@@ -88,11 +92,11 @@ ShedOut
                 <thead>
                     <tr>
                         <th>Loco Number</th>
-                        <th>Failure Date</th>
-                        <th>Shed In Date</th>
-                        <th>Shed Out Date</th>
-                        <th>Add Section</th>
-                        <th>Section</th>
+                        <th>Failure Date / Shed In Date</th>
+                        
+                        <th>Shed Out Date </th>
+                        <th>Schedule</th>
+                        
                         
                     </tr>
                     
@@ -104,20 +108,17 @@ ShedOut
                     <tr class='danger '>
                         <td class='text-primary'><a class="dropdown-item"
                             style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'repairdetailhome' l.id%}">{{l.LocoNumber}}</a></td>                        
-                            <td class='text-primary'>{{c.LocoFailDate}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}}</td>
-                        <td class='text-primary'>{{c.ShedOutDate}}</td>
+                            href="{% url 'repairdetailhome' c.id%}">{{l.LocoNumber}}</a></td>
+                        <td class='text-primary'>{{c.LocoFailDate}} <br> {{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.ShedOutDate}} </td>
+
+                        <td class='text-primary'>{{c.RepairType}} </td>
+                       
                         
-                        
-                        {%for x in p%}
-                        <td class='text-primary'><a class="dropdown-item"
-                            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'viewSectionRepairDetail' x.id%}">{{x.RepSection}} </a>
-                        {%endfor%}
-                        {%endif%}
-                        {%endif%}
                     </tr>
+                        {%endif%}
+                        {%endif%}
+                    
                     {%endfor%}
                 </tbody>
                 
@@ -134,11 +135,10 @@ ShedOut
                 <thead>
                     <tr>
                         <th>Loco Number</th>
-                        <th>Failure Date</th>
-                        <th>Shed In Date</th>
-                        <th>Shed Out Date</th>
-                        <th>Add Section</th>
-                        <th>Section</th>
+                        <th>Failure Date / Shed In Date</th>
+                        
+                        <th>Shed Out Date </th>
+                        <th>Schedule</th>
                         
                     </tr>
                     
@@ -150,21 +150,17 @@ ShedOut
                     <tr class='danger '>
                         <td class='text-primary'><a class="dropdown-item"
                             style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'repairdetailhome' l.id%}">{{l.LocoNumber}}</a></td>                       
-                             <td class='text-primary'>{{c.LocoFailDate}}</td>
-                        <td class='text-primary'>{{c.ShedInDate}}</td>
-                        <td class='text-primary'>{{c.ShedOutDate}}</td>
+                            href="{% url 'repairdetailhome' c.id%}">{{l.LocoNumber}}</a></td>
+                        <td class='text-primary'>{{c.LocoFailDate}} <br> {{c.ShedInDate}}</td>
+                        <td class='text-primary'>{{c.ShedOutDate}} </td>
+
+                        <td class='text-primary'>{{c.RepairType}} </td>
+                       
                         
-                        
-                        
-                        {%for x in p%}
-                        <td class='text-primary'><a class="dropdown-item"
-                            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
-                            href="{% url 'viewSectionRepairDetail' x.id%}">{{x.RepSection}} </a>
-                        {%endfor%}
-                        {%endif%}
-                        {%endif%}
                     </tr>
+                        {%endif%}
+                        {%endif%}
+                    
                     {%endfor%}
                 </tbody>
                 
@@ -184,6 +180,7 @@ ShedOut
             <tr>
                 <th>Loco Number</th>
                 <th>Failure Date / Days since Failure</th>
+                <th>Schedule</th>
                 <th>Control Actions</th>
                 
                 
@@ -196,7 +193,47 @@ ShedOut
             
             <tr class='danger '>
                 <td class='text-primary'>{{l.LocoNumber}} </td>
-                <td class='text-primary'>{{c.LocoFailDate}} / {{r}}</td>
+                <td class='text-primary'>{{c.LocoFailDate}} <br> {{r}}</td>
+                
+                <td class='text-primary'><form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'Schedule2' c.id%}">
+                    {% csrf_token %}
+                    <label for="Schedule">Choosen Schedule: {{l.RepairType}}</label>
+                    <select name="Schedule" id="Schedule">
+                        <option value="IOH">IOH</option>
+                        <option value="POH">POH</option>
+                        <option value="TOH">TOH</option>
+                        <option value="MTR">MTR</option>
+                        <option value="Y1">Y1</option>
+                        <option value="Y2">Y2</option>
+                        <option value="3Y">3Y</option>
+                        <option value="Y4">Y4</option>
+                        <option value="Y5">Y5</option>
+                        <option value="6Y">6Y</option>
+                        <option value="Alco-M12">Alco-M12</option>
+                        <option value="Alco-M18">Alco-M18</option>
+                        <option value="Alco-M24">Alco-M24</option>
+                        <option value="Alco-M30">Alco-M30</option>
+                        <option value="Alco-M36">Alco-M36</option>
+                        <option value="Alco-M72">Alco-M72</option>
+                        <option value="Alco-M108">Alco-M108</option>
+                        <option value="IA1">IA1</option>
+                        <option value="IB">IB</option>
+                        <option value="IA2">IA2</option>
+                        <option value="IC">IC</option>
+                        <option value="HHP-30D">HHP-30D</option>
+                        <option value="HHP-90D">HHP-90D</option>
+                        <option value="HHP-180D">HHP-180D</option>
+                        <option value="Alco-Trip(30D)">Alco-Trip(30D)</option>
+                        <option value="Alco-M(60D)">Alco-M(60D)</option>
+                        <option value="Alco-M2(120D)">Alco-M2(120D)</option>
+                        <option value="Alco-M6(180D)">Alco-M6(180D)</option>
+                        <option value="OOC">OOC</option>
+                      </select>
+                      <input type="submit" value="save" style="background-color: rgb(255, 255, 255); color:black" />
+           
+                
+                    </form></td>
+                
                 <td class='text-primary'>
                     <form method="POST" action="{%url 'addShedInData' l.id %}">
                         {% csrf_token %}

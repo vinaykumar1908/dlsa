@@ -65,7 +65,7 @@ Home
         </div>
 
         <h3 class="text-dark">Bookings </h3>
-        <div class="overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+        <div class="overflow-auto table-wrapper-scroll-y w-100 h-10 my-custom-scrollbar center3" style="background-color:DodgerBlue;">
             <form method="POST" action="{%url 'BookingDateChecker'%}">
                 {% csrf_token %}
                 <h5>Select Date</h5>
@@ -81,6 +81,7 @@ Home
                 <thead>
                     <tr>
                         <th>S.No</th>
+                        <th>Booking Date</th>
                         <th>Loco Number</th>
                         <th>Location</th>
                         <th>Schedule</th>
@@ -91,22 +92,23 @@ Home
                         <th>Shunting Needed</th>
                         <th>Manpower Booked </th>
 
-                        <th>PDC</th>
+                        <th>Booking Status / Completion Date </th>
                         
                     </tr>
                     {%for j1 ,g1,h1,k1 in Item%}
                     <tr class='danger'>
                         <td class='text-primary'>{{forloop.counter}} </td>
+                        <td class='text-primary'>{{j1.created_date}} </td>
                         <td class='text-primary'>{{j1.RepSection.LocoNumber}} </td>
                         <td class='text-primary'>{{j1.RepSection.LocoNumber.PresentLocation}} </td>
                         <td class='text-primary'>{{j1.RepSection.LocoNumber.RepairType}}</td>
                         <td class='text-primary'>{{j1.RepSection.RepSection}}</td>
                         <td class='text-primary'>{{j1.text}} </td>
                         <td class='text-primary'>{%for q in g1 %}{{forloop.counter}} ) {{q}}:<br>Demanded on {{q.RecordCreationDate}},<br>Received on {{q.ReceiptDate}}<br>{%endfor%} </td>
-                        <td class='text-primary'>{%for q in h1 %}{{forloop.counter}} ) {{q}}<br>{%endfor%} </td>
+                        <td class='text-primary'>{%for q in h1 %}{{forloop.counter}} ) {{q}}<br>Demanded on {{q.RecordCreationDate}},<br>Completed on {{q.CompletionDate}}<br>{%endfor%} </td>
                         <td class='text-primary'>{%for q in k1 %}{{forloop.counter}} } {{q}}<br>{%endfor%} </td>
 
-                        <td class='text-primary'></td>
+                        <td class='text-primary'>{{j1.workComplete}}<br>{{j1.WorkEndDateTime}}</td>
                         
 
                     </tr>
@@ -116,6 +118,52 @@ Home
                 
             </table>
         </div>
+
+        <h3 class="text-dark">Shunting </h3>
+        <div class="overflow-auto w-100 h-10 center3 table-wrapper-scroll-y my-custom-scrollbar" style="background-color:DodgerBlue;">
+        
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Section</th>
+                        <th>Loco Number</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Demanded Since / Completed On</th>
+                        <th>Completed ?</th>
+                        
+                        
+                    </tr>
+                    {%for j1 in shuntinglist%}
+                    <tr class='danger'>
+                        <td class='text-primary'>{{forloop.counter}} </td>
+                        <td class='text-primary'>{{j1.ForJob.RepSection.RepSection}}</td>
+                        <td class='text-primary'>{{j1.ForJob.RepSection.LocoNumber}} </td>
+                        <td class='text-primary'>{{j1.From}} </td>
+                        <td class='text-primary'>{{j1.To}}</td>
+                        <td class='text-primary'>{{j1.RecordCreationDate}} / {{j1.CompletionDate}}</td>
+                        <td class='text-primary'>{%if j1.ShuntingStatus is False%}
+                            
+                            
+                            {{j1.ShuntingStatus}} <br>
+                               <form method="POST" style="flex-grow: 2; background-color:rgb(246, 192, 153);" action="{%url 'ChangeShuntingCompletionStatus' j1.id%}">
+                              {% csrf_token %}  
+                              <input type="submit" value="Completed !"   >
+                            </form>  </td>
+                            {% else %}
+                            Shunting Done  </td>
+                            {% endif %}
+                        
+
+                    </tr>
+                    {%endfor%}
+                </thead>
+                
+                
+            </table>
+        </div>
+
     </div>
 </div>
 

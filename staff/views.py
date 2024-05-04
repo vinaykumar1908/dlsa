@@ -33,13 +33,13 @@ def addstaffnameautocomplete(request):
             itemTerm = request.GET.get('term')
             print("itemTerm")
             print(itemTerm)
-            res = qs.filter(StaffName__icontains=itemTerm)
+            res = qs.filter(TokenNumber__icontains=itemTerm)
             print("res")
             print(res)
             Item = list()
             for product in res:
                 place_json = {}
-                place_json = str(product.StaffName)
+                place_json = f'{product.StaffName} - {product.TokenNumber}'
                 Item.append(place_json)
                 print("*------JsonResponse Start-----*")
                 print(Item)
