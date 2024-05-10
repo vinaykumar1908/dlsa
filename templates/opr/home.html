@@ -1,0 +1,54 @@
+{%extends 'charts/base.html'%}
+
+
+{%block title%}
+Home
+{%endblock title%}
+
+
+{%block content%}
+<h4 style="font-family:'Apple Chancery'; font-size: 32px;">Time: {{time}} </h4>
+
+
+<div class="center2 table-wrapper-scroll-y my-custom-scrollbar overflow-auto w-100 h-10 center3" style="background-color:DodgerBlue;">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>Loco Number</th>
+               
+                <th>Section</th>
+                
+            </tr>
+            
+        </thead>
+        <tbody>
+           
+            <tr class='danger '>
+                
+                
+                <td class='text-primary'>
+                    
+                    
+                </td>
+                
+                        <td class='text-primary'><a class="dropdown-item"
+                        style="background-color:rgb(19, 208, 32); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+                        href="">{{d.RepSection}}  </a></td>
+                      
+                        
+                       
+            </tr>
+           
+        </tbody>
+        
+
+       
+        
+    </table>
+</div>
+
+
+{%endblock content%}
+{%block afterbody%}
+
+{%endblock afterbody%}
